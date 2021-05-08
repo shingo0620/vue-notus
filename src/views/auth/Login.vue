@@ -45,6 +45,7 @@
                   type="email"
                   class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                   placeholder="Email"
+                  v-model="form.email"
                 />
               </div>
 
@@ -59,6 +60,7 @@
                   type="password"
                   class="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                   placeholder="Password"
+                  v-model="form.password"
                 />
               </div>
               <div>
@@ -67,6 +69,7 @@
                     id="customCheckLogin"
                     type="checkbox"
                     class="form-checkbox border-0 rounded text-blueGray-700 ml-1 w-5 h-5 ease-linear transition-all duration-150"
+                    v-model="form.remember"
                   />
                   <span class="ml-2 text-sm font-semibold text-blueGray-600">
                     Remember me
@@ -78,6 +81,7 @@
                 <button
                   class="bg-blueGray-800 text-white active:bg-blueGray-600 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full ease-linear transition-all duration-150"
                   type="button"
+                  @click="login"
                 >
                   Sign In
                 </button>
@@ -104,13 +108,26 @@
 <script>
 import github from "@/assets/img/github.svg";
 import google from "@/assets/img/google.svg";
+import { login } from '@/requests/auth'
 
 export default {
   data() {
     return {
       github,
       google,
+      form: {
+        email: '',
+        password: '',
+        remember: false
+      }
     };
   },
+
+  methods: {
+    async login () {
+      const res = await login(this.form)
+      console.log(res)
+    }
+  }
 };
 </script>
