@@ -1,7 +1,6 @@
-export default function auth({ next, router }) {
+export default function ({router, next}) {
     if (!localStorage.getItem('accessToken')) {
         return router.push({ name: 'login' });
     }
-
-    return next();
+    next()
 }

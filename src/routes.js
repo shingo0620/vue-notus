@@ -19,26 +19,42 @@ import Landing from "@/views/Landing.vue";
 import Profile from "@/views/Profile.vue";
 import Index from "@/views/Index.vue";
 
+// middleware
+import runMiddleware from '@/middleware'
+
 const routes = [
     {
-        path: "/admin",
-        redirect: "/admin/dashboard",
+        path: `/${process.env.VUE_APP_ADMIN_PREFIX}`,
+        redirect: `/${process.env.VUE_APP_ADMIN_PREFIX}/dashboard`,
         component: Admin,
+        meta: {
+            middleware: ['auth', 'can:access_admin']
+        },
         children: [
             {
-                path: "/admin/dashboard",
+                path: 'dashboard',
+                name: 'admin.dashboard',
                 component: Dashboard,
             },
             {
-                path: "/admin/settings",
+                path: 'settings',
+                name: 'admin.settings',
                 component: Settings,
+                meta: {
+                    middleware: ['can:access_settings']
+                }
             },
             {
-                path: "/admin/tables",
+                path: 'tables',
+                name: 'admin.tables',
                 component: Tables,
+                meta: {
+                    middleware: ['can:access_tables']
+                }
             },
             {
-                path: "/admin/maps",
+                path: 'maps',
+                name: 'admin.maps',
                 component: Maps,
             },
         ],
@@ -50,10 +66,12 @@ const routes = [
         children: [
             {
                 path: "/auth/login",
+                name: 'login',
                 component: Login,
             },
             {
                 path: "/auth/register",
+                name: 'register',
                 component: Register,
             },
         ],
@@ -77,5 +95,13 @@ const router = createRouter({
     history: createWebHistory(),
     routes,
 });
+
+router.beforeEach((to, from, next) => {
+    if (to.meta.middleware) {
+        runMiddleware({from, to, next, router, middleware: to.meta.middleware})
+    } else {
+        next()
+    }
+})
 
 export default router
