@@ -24,11 +24,11 @@ import runMiddleware from '@/middleware'
 
 const routes = [
     {
-        path: `/${process.env.VUE_APP_ADMIN_PREFIX}`,
-        redirect: `/${process.env.VUE_APP_ADMIN_PREFIX}/dashboard`,
+        path: `/${process.env.VUE_APP_ADMIN_PATH || 'admin'}`,
+        redirect: `/${process.env.VUE_APP_ADMIN_PATH || 'admin'}/dashboard`,
         component: Admin,
         meta: {
-            middleware: ['auth', 'can:access_admin']
+            // middleware: ['auth', 'can:access_admin']
         },
         children: [
             {
@@ -41,16 +41,13 @@ const routes = [
                 name: 'admin.settings',
                 component: Settings,
                 meta: {
-                    middleware: ['can:access_settings']
+                    // middleware: ['can:access_settings']
                 }
             },
             {
                 path: 'tables',
                 name: 'admin.tables',
                 component: Tables,
-                meta: {
-                    middleware: ['can:access_tables']
-                }
             },
             {
                 path: 'maps',
